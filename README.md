@@ -36,3 +36,6 @@ Error / Problem handling:
 - If the owner disappears or looses his keys their is a hard fallback where users can withdraw their ticket costs after one year if the tournament was not finished.
 
 Sidenote: The owner can modify the results of the current round (as he needs to resolve conflicts and so on). If he does there is a message sent via the blockchain so it is traceable and the a malitious behavior could be proven. In general I think that the owner wants to build up a good reputation in the community and he will get the fee if erything runs correctly so I think this should be no problem. 
+
+
+You can find a test version of this contract on Polygon-Mumbai: https://mumbai.polygonscan.com/address/0xAD4C61aC44eEe1bb1a036275342eB5a5051ff539
