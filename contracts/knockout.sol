@@ -2,6 +2,12 @@
 pragma solidity ^0.8.9;
 
 contract Knockout {
+    enum TournamentState {
+        CREATED,
+        STARTED,
+        FINISHED,
+        CANCELED
+    }
     struct TournamentConfig {
         address owner; // Owner of the tournament
         string name; // Name of the tournament
@@ -17,6 +23,8 @@ contract Knockout {
         uint playerCount;
         uint totalAmount;
         uint currentStep;
+        TournamentState state;
+        address winner;
         address[] remainingParticipants;
     }
 
@@ -292,16 +300,17 @@ contract Knockout {
     function getTournament(
         uint tournamentId
     ) public view returns (TournamentInfo memory info) {
-        require(
-            tournamentId >= 0 && tournamentId <= lastTournamentIndex,
-            "Invalid tournament Id"
-        );
+        TournamentState state = getState(tournamentId);
         uint current = currentStep[tournamentId];
         info.currentStep = current;
         info.remainingParticipants = steps[tournamentId][current];
         info.playerCount = steps[tournamentId][0].length;
         info.totalAmount = totalAmount[tournamentId];
         info.config = tournaments[tournamentId];
+        info.state = state;
+        info.winner = state == TournamentState.FINISHED
+            ? steps[tournamentId][current][0]
+            : address(0);
         return info;
     }
 
@@ -314,5 +323,34 @@ contract Knockout {
             infos[i] = getTournament(i + 1);
         }
         return infos;
+    }
+
+    function getState(
+        uint tournamentId
+    ) public view returns (TournamentState state) {
+        require(
+            tournamentId >= 0 && tournamentId <= lastTournamentIndex,
+            "Invalid tournament Id"
+        );
+        uint current = currentStep[tournamentId];
+        uint count = steps[tournamentId][current].length;
+        TournamentConfig storage config = tournaments[tournamentId];
+        if (current == 0) {
+            if (
+                config.registerEndDate < block.timestamp &&
+                config.minParticipants > count
+            ) {
+                state = TournamentState.CANCELED;
+            } else {
+                state = TournamentState.CREATED;
+            }
+        } else if (count == 1) {
+            state = steps[tournamentId][current][0] == address(0)
+                ? TournamentState.CANCELED
+                : TournamentState.FINISHED;
+        } else {
+            state = TournamentState.STARTED;
+        }
+        return state;
     }
 }

@@ -3,6 +3,13 @@ import { expect } from "chai";
 import { ethers } from 'hardhat'
 import '@nomiclabs/hardhat-ethers'
 
+enum TournamentState {
+  CREATED,
+  STARTED,
+  FINISHED,
+  CANCELED
+}
+
 describe("Knockout", function () {
   async function deployOneYearLockFixture() {
 
@@ -24,6 +31,7 @@ describe("Knockout", function () {
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 3);
       const id = "1";
       expect((await knockout.lastTournamentIndex()).toString()).to.equal(id);
+      expect(await knockout.getState(id)).to.equal(TournamentState.CREATED);
 
       let info = await knockout.getTournament(id);
       expect(info.playerCount.toString()).to.equal('0');
@@ -42,6 +50,7 @@ describe("Knockout", function () {
       info = await knockout.getTournament(id);
       expect(info.remainingParticipants.length).to.equal(4);
       expect(info.currentStep.toString()).to.equal('1');
+      expect(await knockout.getState(id)).to.equal(TournamentState.STARTED);
 
 
       await knockout.connect(user2).claimVictory(id);
@@ -56,6 +65,10 @@ describe("Knockout", function () {
 
       await knockout.connect(user2).claimVictory(id);
       await knockout.connect(user1).nextStep(id);
+
+      expect(await knockout.getState(id)).to.equal(TournamentState.FINISHED);
+      info = await knockout.getTournament(id);
+      expect(info.winner).to.equal(user2.address);
 
       const before1 = await ethers.provider.getBalance(user1.address);
       const before2 = await ethers.provider.getBalance(user2.address);
@@ -191,6 +204,7 @@ describe("Knockout", function () {
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
       await time.increase(time.duration.days(2));
 
+      expect(await knockout.getState(id)).to.equal(TournamentState.CANCELED);
       await knockout.connect(user2).claimPrice(id);
     });
 
@@ -208,7 +222,9 @@ describe("Knockout", function () {
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('2') });
       await knockout.connect(user1).nextStep(id);
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
+
       await knockout.connect(user1).forceNextStep(id);
+      expect(await knockout.getState(id)).to.equal(TournamentState.CANCELED);
 
       await knockout.connect(user2).claimPrice(id);
       await knockout.connect(user3).claimPrice(id);
