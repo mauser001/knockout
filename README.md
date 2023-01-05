@@ -38,4 +38,4 @@ Error / Problem handling:
 Sidenote: The owner can modify the results of the current round (as he needs to resolve conflicts and so on). If he does there is a message sent via the blockchain so it is traceable and the a malitious behavior could be proven. In general I think that the owner wants to build up a good reputation in the community and he will get the fee if erything runs correctly so I think this should be no problem. 
 
 
-You can find a test version of this contract on Polygon-Mumbai: https://mumbai.polygonscan.com/address/0xAD4C61aC44eEe1bb1a036275342eB5a5051ff539
+You can find a test version of this contract on Polygon-Mumbai: https://mumbai.polygonscan.com/address/0x9bFae58A8f394CbD2E0a6448cD103818577aFF29
