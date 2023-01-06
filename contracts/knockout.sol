@@ -1,33 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
+import "./iKnockout.sol";
 
-contract Knockout {
-    enum TournamentState {
-        CREATED,
-        STARTED,
-        FINISHED,
-        CANCELED
-    }
-    struct TournamentConfig {
-        address owner; // Owner of the tournament
-        string name; // Name of the tournament
-        uint ticketCost; // Participation cost (in Eth)
-        uint fee; // Fee in percent of the ticket costs
-        uint registerEndDate; // Date until players can register for the tournament
-        uint minParticipants; // Minimum number of participants. If min is not reached by the registerEndDate then users can withdraw their cost and tournament cannot be started
-        uint createdAt; // Timestamp when it was created
-    }
-
-    struct TournamentInfo {
-        TournamentConfig config;
-        uint playerCount;
-        uint totalAmount;
-        uint currentStep;
-        TournamentState state;
-        address winner;
-        address[] remainingParticipants;
-    }
-
+contract Knockout is IKnockout {
     uint public lastTournamentIndex;
     mapping(uint => TournamentConfig) public tournaments;
     mapping(uint => uint) public totalAmount; // tournament index => total value
@@ -66,7 +41,7 @@ contract Knockout {
         uint fee,
         uint registerEndDate,
         uint minParticipants
-    ) public {
+    ) external {
         require(ticketCost > 0, "Ticket cost must be greater then 0");
         require(fee <= 10, "Max fee is 10 percent");
         require(
@@ -94,7 +69,7 @@ contract Knockout {
     }
 
     // called by a player to participate in a tournament
-    function participate(uint tournamentId) public payable {
+    function participate(uint tournamentId) external payable {
         require(
             tournamentId >= 0 && tournamentId <= lastTournamentIndex,
             "Invalid tournament Id"
@@ -119,12 +94,12 @@ contract Knockout {
     }
 
     // used by the owner to proceed to the next tournament round.
-    function nextStep(uint tournamentId) public {
+    function nextStep(uint tournamentId) external {
         _nextStep(tournamentId, false);
     }
 
     // Can be used by the owner as an emergency to abord the tournament.
-    function forceNextStep(uint tournamentId) public {
+    function forceNextStep(uint tournamentId) external {
         _nextStep(tournamentId, true);
     }
 
@@ -195,7 +170,7 @@ contract Knockout {
     }
 
     // For players to claim their victory in a match
-    function claimVictory(uint tournamentId) public {
+    function claimVictory(uint tournamentId) external {
         require(
             tournamentId >= 0 && tournamentId <= lastTournamentIndex,
             "Invalid tournament Id"
@@ -216,7 +191,7 @@ contract Knockout {
     }
 
     // For the tournament owner to settle disputes
-    function setVictory(uint tournamentId, address player, bool won) public {
+    function setVictory(uint tournamentId, address player, bool won) external {
         require(
             tournamentId >= 0 && tournamentId <= lastTournamentIndex,
             "Invalid tournament Id"
@@ -237,7 +212,7 @@ contract Knockout {
     }
 
     // For the winner to claim his price or if a tournament did not have enough participants or did not finish with a winner to withdraw their initial money
-    function claimPrice(uint tournamentId) public {
+    function claimPrice(uint tournamentId) external {
         require(
             tournamentId >= 0 && tournamentId <= lastTournamentIndex,
             "Invalid tournament Id"
@@ -315,7 +290,11 @@ contract Knockout {
     }
 
     // get the informations for all tournaments
-    function getAllTournaments() public view returns (TournamentInfo[] memory) {
+    function getAllTournaments()
+        external
+        view
+        returns (TournamentInfo[] memory)
+    {
         TournamentInfo[] memory infos = new TournamentInfo[](
             lastTournamentIndex
         );

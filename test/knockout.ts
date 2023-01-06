@@ -25,7 +25,7 @@ describe("Knockout", function () {
   describe("Create tournament", function () {
     it("It should create and run a complete tournament", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 3);
@@ -85,7 +85,7 @@ describe("Knockout", function () {
   describe("Error and special case handling", function () {
     it("Create with invalid informations", async function () {
       const { knockout, user1 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       await expect(knockout.connect(user1).createTournament('First', 2, 5, blockTime, 3)).to.be.revertedWith("Register end date must be in the future");
 
@@ -99,7 +99,7 @@ describe("Knockout", function () {
 
     it("Invalid participation", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -124,7 +124,7 @@ describe("Knockout", function () {
 
     it("Next step handling", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -148,7 +148,7 @@ describe("Knockout", function () {
 
     it("Conflict resolution", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -171,7 +171,7 @@ describe("Knockout", function () {
 
     it("Claim price", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -194,7 +194,7 @@ describe("Knockout", function () {
 
     it("Withdraw funds it not enough participants", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -212,7 +212,7 @@ describe("Knockout", function () {
 
     it("Withdraw funds tournament ended without winner", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -232,7 +232,7 @@ describe("Knockout", function () {
 
     it("Withdraw funds of unfinished tournament after one year", async function () {
       const { knockout, user1, user2, user3, user4 } = await loadFixture(deployOneYearLockFixture);
-      knockout.connect(user1);
+
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
@@ -241,7 +241,9 @@ describe("Knockout", function () {
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('2') });
       await knockout.connect(user1).nextStep(id);
+      await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
 
+      await time.increase(time.duration.days(1));
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
       await time.increase(time.duration.days(366));
 
