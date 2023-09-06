@@ -28,7 +28,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 3);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 3);
       const id = "1";
       expect((await knockout.lastTournamentIndex()).toString()).to.equal(id);
       expect(await knockout.getState(id)).to.equal(TournamentState.CREATED);
@@ -87,14 +87,14 @@ describe("Knockout", function () {
       const { knockout, user1 } = await loadFixture(deployOneYearLockFixture);
 
       const blockTime = await time.latest();
-      await expect(knockout.connect(user1).createTournament('First', 2, 5, blockTime, 3)).to.be.revertedWith("Register end date must be in the future");
+      await expect(knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, blockTime, 3)).to.be.revertedWith("Register end date must be in the future");
 
       const oneDayInTheFuture = blockTime + time.duration.days(1);
       await expect(knockout.connect(user1).createTournament('First', 0, 5, oneDayInTheFuture, 3)).to.be.revertedWith("Ticket cost must be greater then 0");
 
-      await expect(knockout.connect(user1).createTournament('First', 1, 11, oneDayInTheFuture, 3)).to.be.revertedWith("Max fee is 10 percent");
+      await expect(knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 11, oneDayInTheFuture, 3)).to.be.revertedWith("Max fee is 10 percent");
 
-      await expect(knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 1)).to.be.revertedWith("Minimum perticipants must be >= 2");
+      await expect(knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 1)).to.be.revertedWith("Minimum perticipants must be >= 2");
     });
 
     it("Invalid participation", async function () {
@@ -102,7 +102,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await expect(knockout.connect(user2).participate('2', { value: ethers.utils.parseEther('2') })).to.be.revertedWith("Invalid tournament Id");
 
@@ -127,7 +127,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       await expect(knockout.connect(user1).nextStep("2")).to.be.revertedWith("Invalid tournament Id");
       const id = "1";
       await expect(knockout.connect(user2).nextStep(id)).to.be.revertedWith("Not the owner of this tournament");
@@ -151,7 +151,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('2') });
@@ -174,7 +174,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('2') });
@@ -197,7 +197,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });
 
@@ -215,7 +215,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });
@@ -235,7 +235,7 @@ describe("Knockout", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 2, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('2'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('2') });

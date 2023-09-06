@@ -25,7 +25,7 @@ describe("Bet", function () {
       knockout.connect(user1);
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 2);
       const id = "1";
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('1') });
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('1') });
@@ -62,7 +62,7 @@ describe("Bet", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 2);
       await knockout.connect(user1).participate(id, { value: ethers.utils.parseEther('1') });
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('1') });
       await expect(bet.connect(user2).placeABet(id, user2.address, { value: ethers.utils.parseEther('1') })).to.be.revertedWith("Registration is still open");
@@ -87,7 +87,7 @@ describe("Bet", function () {
 
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 2);
 
       await expect(bet.connect(user2).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('1') });
@@ -121,7 +121,7 @@ describe("Bet", function () {
       const id = "1";
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 2);
 
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('1') });
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('1') });
@@ -155,7 +155,7 @@ describe("Bet", function () {
       const id = "1";
       const blockTime = await time.latest();
       const oneDayInTheFuture = blockTime + time.duration.days(1);
-      await knockout.connect(user1).createTournament('First', 1, 5, oneDayInTheFuture, 2);
+      await knockout.connect(user1).createTournament('First', ethers.utils.parseEther('1'), 5, oneDayInTheFuture, 2);
 
       await knockout.connect(user3).participate(id, { value: ethers.utils.parseEther('1') });
       await knockout.connect(user2).participate(id, { value: ethers.utils.parseEther('1') });

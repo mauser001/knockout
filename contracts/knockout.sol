@@ -87,7 +87,7 @@ contract Knockout is IKnockout {
             !participating[tournamentId][msg.sender],
             "Already participating"
         );
-        require(msg.value == config.ticketCost * 1 ether, "Payed wrong amount");
+        require(msg.value == config.ticketCost, "Payed wrong amount");
         participating[tournamentId][msg.sender] = true;
         steps[tournamentId][0].push(msg.sender);
         totalAmount[tournamentId] += msg.value;
@@ -257,7 +257,7 @@ contract Knockout is IKnockout {
                 totalAmount[tournamentId] -= fee;
             }
         } else if (canWithdraw) {
-            toWithdraw = config.ticketCost * 1 ether;
+            toWithdraw = config.ticketCost;
         }
 
         // to be sure we dont' withdraw to much, like if there is a rounding error.
