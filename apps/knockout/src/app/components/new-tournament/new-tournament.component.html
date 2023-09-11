@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-card-header>
+        Create new tournament
+    </mat-card-header>
+    <mat-card-content>
+        <form (ngSubmit)="onSubmit()" [formGroup]="tournamentForm" novalidate>
+            <mat-form-field>
+                <mat-label>Tournament name</mat-label>
+                <input matInput placeholder="My tournament" formControlName="tournamentName">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Participation cost in {{ nativeCurrency$ | async }}</mat-label>
+                <input matInput type="number" formControlName="cost" step="0.00001">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Fee (*percent of total price money)</mat-label>
+                <input matInput type="number" formControlName="fee" step="1">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Minimum participants</mat-label>
+                <input matInput type="number" formControlName="minParticipants" step="1">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Registration end date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="endDate" placeholder="Choose a date"
+                    [min]="tomorrow">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <button [disabled]="!tournamentForm.valid || (isLoading$ | async)" mat-raised-button
+                color="primary">Submit</button>
+        </form>
+        <mat-error *ngIf="hasError$ | async">
+            There was an error creating the tournament.
+        </mat-error>
+    </mat-card-content>
+</mat-card>

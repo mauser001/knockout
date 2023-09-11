@@ -1,0 +1,13 @@
+.connected {
+    cursor: pointer;
+
+    &::before {
+        border-radius: 10px;
+        background-color: green;
+        content: " ";
+        min-width: 10px;
+        min-height: 10px;
+        display: inline-block;
+        margin: 2px;
+    }
+}

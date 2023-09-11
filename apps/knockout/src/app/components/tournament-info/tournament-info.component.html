@@ -1,0 +1,38 @@
+<mat-card *ngIf="tournament">
+    <mat-card-content>
+        <div class="info">
+            <div class="label">Name</div>
+            <div>{{tournament.config.name}}</div>
+        </div>
+        <div class="info">
+            <div class="label">Status</div>
+            <div>{{tournament.state | tournamentState}}</div>
+        </div>
+        <div class="info">
+            <div class="label">Owner</div>
+            <div>{{isOwner() ? "You are the owner" : tournament.config.owner }}</div>
+        </div>
+        <div class="info">
+            <div class="label">Ticket cost</div>
+            <div>{{ tournament.config.ticketCost | formatEther }}</div>
+        </div>
+        <div class="info" *ngIf="tournament.participating">
+            <div class="label">Participating</div>
+            <div>You are participating in this thournament</div>
+        </div>
+        <div class="info">
+            <div class="label">Registration until</div>
+            <div>{{ tournament.config.registerEndDate | registerUntil }}</div>
+        </div>
+        <div class="buttons">
+            <button *ngIf="canClaim()" mat-mini-fab color="primary" matTooltip="Claim price" aria-label="Claim price"
+                (click)="claimPrice()">
+                <mat-icon>system_update_alt</mat-icon>
+            </button>
+            <button *ngIf="canJoin()" mat-mini-fab color="primary" matTooltip="Join tournament"
+                aria-label="Join tournament" (click)="participate()">
+                <mat-icon>add circle</mat-icon>
+            </button>
+        </div>
+    </mat-card-content>
+</mat-card>
