@@ -12,16 +12,12 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./connect-button.component.scss']
 })
 export class ConnectButtonComponent {
-  isConnecting$: BehaviorSubject<boolean>
-  isConnected$: BehaviorSubject<boolean>
+  isConnecting$ = this.web3ConnectService.isConnecting$;
+  isConnected$ = this.web3ConnectService.isConnected$;
 
-  constructor(private web3Connect: Web3ConnectService) {
-    this.isConnecting$ = web3Connect.isConnecting$
-    this.isConnected$ = web3Connect.isConnected$
-  }
+  constructor(private web3ConnectService: Web3ConnectService) { }
 
   connect() {
-    console.log("button connect");
-    this.web3Connect.openModal();
+    this.web3ConnectService.openModal();
   }
 }

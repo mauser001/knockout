@@ -5,6 +5,7 @@ import { TournamentListService } from './tournament-list.service';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { Abi, Address, WriteContractParameters } from 'viem';
 import { environment } from 'environment';
+import { waitForTransaction } from '@wagmi/core';
 
 @Injectable({
   providedIn: 'any'
@@ -41,7 +42,8 @@ export class JoinTournamentService {
         value: cost,
         args: [tournamentId]
       }
-      await client.writeContract(args);
+      const hash = await client.writeContract(args);
+      const data = await waitForTransaction({ hash })
       this.tournamentListService.reload();
     } catch (err) {
       this.hasError$.next(true);

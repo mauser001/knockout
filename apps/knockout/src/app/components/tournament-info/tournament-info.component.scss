@@ -10,3 +10,13 @@
     display: flex;
     justify-content: end;
 }
+
+.goto_details{
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+    &:hover{
+        opacity: 0.8;
+    }
+}

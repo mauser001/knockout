@@ -9,3 +9,7 @@ export function isInTheFutureUnix(big: bigint): boolean {
 export function isInTheFuture(ts: number): boolean {
     return ts > Date.now();
 }
+
+export function dateToUnixString(date: Date): string {
+    return Math.floor(date.getTime() / 1000).toString();
+}

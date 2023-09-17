@@ -6,6 +6,7 @@ import { Abi, Address } from 'viem';
 import { environment } from 'environment';
 import { readContract, readContracts } from '@wagmi/core';
 import { Tournament } from '../models';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class TournamentListService {
 
   constructor(private web3ConnectService: Web3ConnectService) {
     this.web3ConnectService.isConnected$.pipe(
+      takeUntilDestroyed(),
       filter((value) => value)
     ).subscribe(this.reload)
   }

@@ -1,0 +1,102 @@
+<app-loading-spinner *ngIf="isLoading$ | async" />
+<div *ngIf="tournament$ | async as tournament">
+    <h2>Tournament {{ tournament.config.name }} #{{tournamentId}}</h2>
+    <mat-card>
+        <mat-card-content>
+            <div class="info">
+                <div class="label">Name</div>
+                <div>{{tournament.config.name}}</div>
+            </div>
+            <div class="info">
+                <div class="label">Status</div>
+                <div>{{tournament.state | tournamentState}}</div>
+            </div>
+            <div class="info">
+                <div class="label">Owner</div>
+                <div *ngIf="tWrapper().isOwner; else notTheOwner">You are the owner</div>
+                <ng-template #notTheOwner>
+                    <app-address [address]="tournament.config.owner"></app-address>
+                </ng-template>
+            </div>
+            <div class="info">
+                <div class="label">Ticket cost</div>
+                <div>{{ tournament.config.ticketCost | formatEther }}</div>
+            </div>
+            <div class="info">
+                <div class="label">Fee</div>
+                <div>{{ tournament.config.fee | formatEther }}</div>
+            </div>
+            <div class="info" *ngIf="tournament.participating">
+                <div class="label">Participating</div>
+                <div>You are participating in this tournament</div>
+            </div>
+            <div class="info">
+                <div class="label">Registration until</div>
+                <div>{{ tournament.config.registerEndDate | registerUntil }}</div>
+            </div>
+            <div class="info" *ngIf="tWrapper().winner">
+                <div class="label">Winner</div>
+                <div class="flex-align-center winner">
+                    <mat-icon>emoji_events</mat-icon>
+                    <app-address [address]="tournament.config.owner"></app-address>
+                </div>
+            </div>
+            <div class="info" *ngIf="tournament.remainingParticipants.length > 1">
+                <div class="label">Round {{tournament.currentStep}} pairings</div>
+                <table mat-table [dataSource]="claimWonTableData()!" class="mat-elevation-z1">
+                    <ng-container matColumnDef="player1">
+                        <th mat-header-cell *matHeaderCellDef> Player 1</th>
+                        <td mat-cell *matCellDef="let element">
+                            <app-player-cell [address]="element.player1" [hasWon]="element.player1Won"
+                                [canChange]="tWrapper().canChange" (setWinner)="setWinner($event)" />
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="player2">
+                        <th mat-header-cell *matHeaderCellDef> Player 2</th>
+                        <td mat-cell *matCellDef="let element">
+                            <app-player-cell *ngIf="element.player2; else noOpponent" [address]="element.player2"
+                                [hasWon]="element.player2Won" [canChange]="tWrapper().canChange"
+                                (setWinner)="setWinner($event)" />
+                            <ng-template #noOpponent>
+                                No opponent
+                            </ng-template>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+            <div class="buttons">
+                <button *ngIf="tWrapper().canStart" mat-mini-fab color="primary" matTooltip="Start tournament"
+                    aria-label="Start tournament" (click)="nextStep()">
+                    <mat-icon>start</mat-icon>
+                </button>
+                <button *ngIf="canProceed() as can" mat-mini-fab color="primary" (click)="nextStep()">
+                    <span *ngIf="can.force; else canProceed"
+                        matTooltip="Some results are missing but you force to the next round"
+                        aria-label="Proceed with caution">
+                        <mat-icon>warning</mat-icon>
+                    </span>
+                    <ng-template #canProceed>
+                        <span matTooltip="Proceed to next round" aria-label="Proceed to next round">
+                            <mat-icon>start</mat-icon>
+                        </span>
+                    </ng-template>
+                </button>
+                <button *ngIf="tWrapper().canClaim" mat-mini-fab color="primary" matTooltip="Claim price"
+                    aria-label="Claim price" (click)="claimPrice()">
+                    <mat-icon>system_update_alt</mat-icon>
+                </button>
+                <button *ngIf="tWrapper().canWin && !hasClaimWon()![address()!]" mat-mini-fab color="primary"
+                    matTooltip="Claim that you have won this round" aria-label="Claim win" (click)="claimWon()">
+                    <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button *ngIf="tWrapper().canJoin" mat-mini-fab color="primary" matTooltip="Join tournament"
+                    aria-label="Join tournament" (click)="participate()">
+                    <mat-icon>add circle</mat-icon>
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

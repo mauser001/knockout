@@ -1,0 +1,7 @@
+<app-address [address]="address" [class.hasWon]="hasWon"></app-address>
+<div class="buttons" *ngIf="canChange">
+    <button mat-mini-fab color="primary" [matTooltip]="setWinnerTT()" [ariaLabel]="setWinnerTT()"
+        (click)="toggleWinner()">
+        <mat-icon>{{hasWon? "do_not_disturb_on":"emoji_events"}}</mat-icon>
+    </button>
+</div>

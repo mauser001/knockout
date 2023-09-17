@@ -1,25 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Web3ConnectService } from './web3-connect.service';
 import { BehaviorSubject } from 'rxjs';
-import { Abi, Address, Chain, WriteContractParameters, parseEther } from 'viem';
-import { ABI_KNOCKOUT } from '../../abis'
-import { environment } from 'environment';
+import { Web3ConnectService } from './web3-connect.service';
 import { TournamentListService } from './tournament-list.service';
-import { TournamentConfig } from 'src/app/models';
-import { ethers } from 'ethers';
+import { Abi, Address, WriteContractParameters } from 'viem';
+import { ABI_KNOCKOUT } from 'src/abis';
+import { environment } from 'environment';
 import { waitForTransaction } from '@wagmi/core';
-import { dateToUnixString } from '../utils';
 
 @Injectable({
-  providedIn: 'any'
+  providedIn: 'root'
 })
-export class CreateTournamentService {
+export class NextStepService {
+
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   hasError$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private web3ConnectService: Web3ConnectService, private tournamentList: TournamentListService) { }
+  constructor(private web3ConnectService: Web3ConnectService, private tournamentListService: TournamentListService) { }
 
-  create = async (config: TournamentConfig) => {
+  nextStep = async (tournamentId: number, force: boolean = false) => {
     this.isLoading$.next(true);
     this.hasError$.next(false);
     try {
@@ -40,16 +38,16 @@ export class CreateTournamentService {
         chain,
         abi: ABI_KNOCKOUT.abi as Abi,
         address: environment.knockOutContract as Address,
-        functionName: "createTournament",
+        functionName: force ? "forceNextStep" : "nextStep",
         account: this.web3ConnectService.address$.getValue() as Address,
-        args: [config.tournamentName, parseEther(config.cost.toString()), config.fee?.toString() || "0", dateToUnixString(config.endDate), config.minParticipants]
+        args: [tournamentId]
       }
       const hash = await client.writeContract(args);
       const data = await waitForTransaction({ hash })
-      this.tournamentList.reload();
+      this.tournamentListService.reload();
     } catch (err) {
       this.hasError$.next(true);
-      console.log("error creating tournament: ", err);
+      console.log("error joining tournament: ", err);
     }
 
     this.isLoading$.next(false);
