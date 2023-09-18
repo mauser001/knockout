@@ -22,10 +22,10 @@ export class Web3ConnectService {
   }
 
   async init() {
-    const chains = [arbitrumNova, polygonMumbai]
+    const chains = environment.chainId === arbitrumNova.id.toString() ? [arbitrumNova] : [polygonMumbai]
     const projectId = environment.walletConnectId
 
-    const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+    const { publicClient } = configureChains([...chains], [w3mProvider({ projectId })])
     const wagmiConfig = createConfig({
       autoConnect: true,
       connectors: w3mConnectors({ projectId, chains }),

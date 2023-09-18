@@ -3,6 +3,8 @@
 html,
 body {
     height: 100%;
+    --white-background: rgba(255, 255, 255, 0.8);
+    --light-white-background: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -16,6 +18,18 @@ body {
     align-items: center;
 }
 
+.overlay {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .winner {
     color: green;
 }
@@ -25,11 +39,16 @@ body {
     font-weight: bold;
 }
 
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
 /** material overrides **/
 .mat-mdc-card {
-    --mdc-elevated-card-container-color: rgba(255, 255, 255, 0.8);
+    --mdc-elevated-card-container-color: var(--white-background);
 }
 
 html {
-    --mat-table-background-color: rgba(255, 255, 255, 0.1);
+    --mat-table-background-color: var(--light-white-background);
 }

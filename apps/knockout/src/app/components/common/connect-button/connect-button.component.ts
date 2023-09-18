@@ -12,7 +12,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrls: ['./connect-button.component.scss']
 })
 export class ConnectButtonComponent {
-  isConnecting$ = this.web3ConnectService.isConnecting$;
   isConnected$ = this.web3ConnectService.isConnected$;
 
   constructor(private web3ConnectService: Web3ConnectService) { }

@@ -2,7 +2,7 @@
 <div *ngIf="tournament$ | async as tournament">
     <mat-card>
         <mat-card-title class="title">
-            <h2>Tournament {{ tournament.config.name }} #{{tournamentId}}</h2>
+            <h2>Tournament #{{tournamentId}} - {{ tournament.config.name }}</h2>
         </mat-card-title>
         <mat-card-content>
             <div class="info">

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Web3ConnectService } from './services/web3-connect.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'knockout';
+  isConnected$ = this.web3ConnectService.isConnected$;
+
+  constructor(private web3ConnectService: Web3ConnectService) { }
 }

@@ -4,13 +4,18 @@
 
 .buttons {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .goto_details {
     position: absolute;
-    right: 4px;
-    top: 4px;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    padding: 4px;
+    background-color: var(--white-background);
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
     cursor: pointer;
 
     &:hover {

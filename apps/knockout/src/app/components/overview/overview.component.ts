@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TournamentListService } from 'src/app/services/tournament-list.service';
 import { Tournament } from 'src/app/models';

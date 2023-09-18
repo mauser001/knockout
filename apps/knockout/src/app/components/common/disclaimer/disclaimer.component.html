@@ -1,0 +1,15 @@
+<div class="open" *ngIf="isOpen; else disclaimerClosed">
+    <div class="close-button" (click)="toggleIsOpen()">X</div>
+    <h2>Disclaimer</h2>
+    <p>This webpage and the related smart contracts are in beta state - use at your own risk!</p>
+    <p class="warning">There might be bugs and you could loose the tokens you payed as entry fee or the tokens you bet.
+    </p>
+    <p>For more information please checkout the open source <a href="https://github.com/mauser001/knockout"
+            target="_blank" aria-label="goto github">github</a> repository</p>
+    <p>The website is just an interface to the smart contracts. Everyone is free to create their own tournament. I do
+        not get any money out if it.</p>
+</div>
+
+<ng-template #disclaimerClosed>
+    <div class="closed" (click)="toggleIsOpen()">Disclaimer</div>
+</ng-template>

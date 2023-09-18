@@ -1,0 +1,33 @@
+:host {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.open {
+    background-color: var(--white-background);
+    text-align: center;
+    padding: 10px;
+
+    .close-button {
+        background-color: var(--white-background);
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 10px;
+        border-bottom-left-radius: 10px;
+        cursor: pointer;
+    }
+}
+
+.closed {
+    position: absolute;
+    border-top-left-radius: 10px;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background-color: var(--white-background);
+    cursor: pointer;
+}

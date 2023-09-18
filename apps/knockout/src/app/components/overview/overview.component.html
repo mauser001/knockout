@@ -1,2 +1,4 @@
-<app-tournament-info *ngFor="let t of (tournaments$ | async); trackById" [tournament]="t">
-</app-tournament-info>
+<div>
+    <app-tournament-info *ngFor="let t of (tournaments$ | async); trackById" [tournament]="t">
+    </app-tournament-info>
+</div>

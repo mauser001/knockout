@@ -4,8 +4,8 @@
 </div>
 
 <ng-template #notConnected>
-    <button mat-raised-button color="primary" [disabled]="isConnecting$ | async" (click)="connect()"
-        matTooltip="Connect with your web3 wallet" aria-label="connect with your web3 wallet">
+    <button mat-raised-button color="primary" (click)="connect()" matTooltip="Connect with your web3 wallet"
+        aria-label="connect with your web3 wallet">
         Connect
     </button>
 </ng-template>

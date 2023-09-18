@@ -19,8 +19,6 @@ TODO List:
       - Display current bets
       - Add a new bet
       - Claim won bets
-  - Disclaimer
-  - Animations
   - Improve loading states
 - Improve error handling
 
@@ -47,6 +45,7 @@ Finished:
     - List of participants
     - Current round
     - Claim winner
+  - Disclaimer
 - Pipes
   - format ether
   - register until
