@@ -1,12 +1,10 @@
 <app-loading-spinner *ngIf="isLoading$ | async" />
 <div *ngIf="tournament$ | async as tournament">
-    <h2>Tournament {{ tournament.config.name }} #{{tournamentId}}</h2>
     <mat-card>
+        <mat-card-title class="title">
+            <h2>Tournament {{ tournament.config.name }} #{{tournamentId}}</h2>
+        </mat-card-title>
         <mat-card-content>
-            <div class="info">
-                <div class="label">Name</div>
-                <div>{{tournament.config.name}}</div>
-            </div>
             <div class="info">
                 <div class="label">Status</div>
                 <div>{{tournament.state | tournamentState}}</div>
@@ -41,7 +39,16 @@
                     <app-address [address]="tournament.config.owner"></app-address>
                 </div>
             </div>
-            <div class="info" *ngIf="tournament.remainingParticipants.length > 1">
+            <div class="info"
+                *ngIf="tournament.remainingParticipants.length > 1 && tournament.currentStep.toString() === '0'">
+                <div class="label">Participants</div>
+                <div>
+                    <app-address *ngFor="let particpant of tournament.remainingParticipants"
+                        [address]="particpant"></app-address>
+                </div>
+            </div>
+            <div class="info"
+                *ngIf="tournament.remainingParticipants.length > 1 && tournament.currentStep.toString() != '0'">
                 <div class="label">Round {{tournament.currentStep}} pairings</div>
                 <table mat-table [dataSource]="claimWonTableData()!" class="mat-elevation-z1">
                     <ng-container matColumnDef="player1">

@@ -15,16 +15,11 @@ TODO List:
   - Claim won bets
 - Components
   - Detailed tournament screen
-    - Proceed to next round
     - Betting
       - Display current bets
       - Add a new bet
       - Claim won bets
   - Disclaimer
-  - Improve layout
-    - Add images
-    - Check on mobile
-    - General layout optimistaions (currently only basic styles applied, focusing on the functionality) 
   - Animations
   - Improve loading states
 - Improve error handling
@@ -48,6 +43,7 @@ Finished:
   - Join tournament button
   - Claim price button
   - Detailed tournament screen
+    - Proceed to next round
     - List of participants
     - Current round
     - Claim winner
@@ -55,3 +51,5 @@ Finished:
   - format ether
   - register until
   - tournament state
+- Improve layout
+  - Add images

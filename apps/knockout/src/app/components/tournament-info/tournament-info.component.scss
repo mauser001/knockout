@@ -2,21 +2,18 @@
     margin: 10px;
 }
 
-.label {
-    font-size: 70%;
-}
-
 .buttons {
     display: flex;
     justify-content: end;
 }
 
-.goto_details{
+.goto_details {
     position: absolute;
     right: 4px;
     top: 4px;
     cursor: pointer;
-    &:hover{
+
+    &:hover {
         opacity: 0.8;
     }
 }

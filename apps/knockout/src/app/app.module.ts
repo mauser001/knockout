@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/common/header/header.component';
 import { Web3ConnectService } from './services/web3-connect.service';
 import { TournamentListService } from './services/tournament-list.service';
+import { NgOptimizedImage } from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TournamentListService } from './services/tournament-list.service';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HeaderComponent
+    HeaderComponent,
+    NgOptimizedImage
   ],
   providers: [Web3ConnectService, TournamentListService],
   bootstrap: [AppComponent]

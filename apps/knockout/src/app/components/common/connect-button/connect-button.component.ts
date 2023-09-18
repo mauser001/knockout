@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Web3ConnectService } from 'src/app/services/web3-connect.service';
-import { BehaviorSubject } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-connect-button',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, MatTooltipModule],
   templateUrl: './connect-button.component.html',
   styleUrls: ['./connect-button.component.scss']
 })

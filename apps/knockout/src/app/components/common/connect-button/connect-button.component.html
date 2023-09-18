@@ -1,5 +1,6 @@
 <div *ngIf="isConnected$ | async; else notConnected">
-    <span class="connected" (click)="connect()">connected</span>
+    <div matTooltip="You are connected with your web3 wallet" aria-label="You are connected" class="connected"
+        (click)="connect()"></div>
 </div>
 
 <ng-template #notConnected>

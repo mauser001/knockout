@@ -10,13 +10,13 @@ export class TournamentStatePipe implements PipeTransform {
   transform(value: TournamentState): string {
     switch (value) {
       case TournamentState.CANCELED:
-        return "canceled";
+        return "Canceled";
       case TournamentState.FINISHED:
-        return "finished";
+        return "Finished";
       case TournamentState.STARTED:
-        return "started";
+        return "Started";
       default:
-        return "created";
+        return "Created";
     }
   }
 

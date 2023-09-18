@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/html'
 import { Chain, GetAccountResult, PublicClient, WalletClient, configureChains, createConfig } from '@wagmi/core'
-import { arbitrum, mainnet, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { arbitrumNova, polygonMumbai } from '@wagmi/core/chains'
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'environment';
 
@@ -22,7 +22,7 @@ export class Web3ConnectService {
   }
 
   async init() {
-    const chains = [arbitrum, mainnet, polygon, polygonMumbai]
+    const chains = [arbitrumNova, polygonMumbai]
     const projectId = environment.walletConnectId
 
     const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])

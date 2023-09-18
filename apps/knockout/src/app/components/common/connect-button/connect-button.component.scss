@@ -1,13 +1,35 @@
 .connected {
+    position: relative;
     cursor: pointer;
+    width: 20px;
+    height: 20px;
 
     &::before {
+        position: absolute;
         border-radius: 10px;
-        background-color: green;
+        background-color: rgba(0, 255, 0, 1);
+        border-color: rgba(0, 255, 0, 0.1);
+        animation: borderWidth 2s infinite;
+        border-width: 2px;
+        border-style: solid;
         content: " ";
         min-width: 10px;
         min-height: 10px;
         display: inline-block;
         margin: 2px;
+    }
+}
+
+@keyframes borderWidth {
+    0% {
+        background-color: rgba(0, 255, 0, 1);
+    }
+
+    50% {
+        background-color: rgba(0, 255, 0, 0.1);
+    }
+
+    100% {
+        background-color: rgba(0, 255, 0, 1);
     }
 }
