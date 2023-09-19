@@ -11,6 +11,7 @@ For detailed explanation on how the tournaments and betting work, please visit t
 ____________________________________________________
 
 TODO List:
+Open:
 - Components
   - Improve loading states
 - Improve error handling
