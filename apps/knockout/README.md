@@ -8,6 +8,8 @@ This webiste and it's releated smart contracts are in beta state. Use at your ow
 
 For detailed explanation on how the tournaments and betting work, please visit the related readme files in the repository root directory.
 
+Testnet version is deployed on the Polygon Mumbai network: https://tournament.maushammer.at/mumbai/
+
 ____________________________________________________
 
 TODO List:
