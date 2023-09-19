@@ -10,6 +10,7 @@ import { CreateTournamentService } from 'src/app/services/tournament/create-tour
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { Web3ConnectService } from 'src/app/services/web3-connect.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-new-tournament',
@@ -25,6 +26,7 @@ import { Web3ConnectService } from 'src/app/services/web3-connect.service';
     MatTooltipModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   providers: [CreateTournamentService, MatDatepickerModule],
   templateUrl: './new-tournament.component.html',
@@ -37,7 +39,12 @@ export class NewTournamentComponent {
   tomorrow: Date;
   nativeCurrency$ = this.web3ConnectService.nativeCurrency$;
 
-  constructor(private createTournamentService: CreateTournamentService, private web3ConnectService: Web3ConnectService, private fb: FormBuilder) {
+  constructor(
+    private createTournamentService: CreateTournamentService,
+    private web3ConnectService: Web3ConnectService,
+    private fb: FormBuilder,
+    private routerService: Router
+  ) {
     this.tomorrow = new Date()
     this.tomorrow.setDate(this.tomorrow.getDate() + 1)
     this.tournamentForm = fb.group({
@@ -51,8 +58,9 @@ export class NewTournamentComponent {
     },)
   }
 
-  onSubmit() {
+  onSubmit = async () => {
     console.log("create new tournament", this.tournamentForm.value.tournamentName)
-    this.createTournamentService.create(this.tournamentForm.value)
+    await this.createTournamentService.create(this.tournamentForm.value)
+    this.routerService.navigate(['']);
   }
 }

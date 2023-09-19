@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/html'
-import { Chain, GetAccountResult, PublicClient, WalletClient, configureChains, createConfig } from '@wagmi/core'
+import { Chain, GetAccountResult, PublicClient, WalletClient, configureChains, createConfig, waitForTransaction } from '@wagmi/core'
 import { arbitrumNova, polygonMumbai } from '@wagmi/core/chains'
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'environment';
+import { Abi, Address, WriteContractParameters } from 'viem';
+import { ABI_BET, ABI_KNOCKOUT } from 'src/abis';
 
 @Injectable({
   providedIn: 'root'
@@ -74,5 +76,32 @@ export class Web3ConnectService {
       console.log("could not get client: ", err)
     }
     return client
+  }
+
+  writeContract = async (functionName: string, args?: Array<unknown>, isTournamentContract = true) => {
+    try {
+      let client = await this.getClient();
+      if (!client) {
+        throw new Error("no client for network");
+
+      }
+      let chain = this.getChain();
+      if (!chain) {
+        throw new Error("chain not found");
+      }
+
+      let params: WriteContractParameters = {
+        chain,
+        abi: (isTournamentContract ? ABI_KNOCKOUT.abi : ABI_BET) as Abi,
+        address: (isTournamentContract ? environment.knockOutContract : environment.betContract) as Address,
+        functionName,
+        account: this.address$.getValue() as Address,
+        args
+      }
+      const hash = await client.writeContract(params);
+      await waitForTransaction({ hash })
+    } catch (err: any) {
+      throw err;
+    }
   }
 }
