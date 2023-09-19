@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter } from 'rxjs';
-import { Web3ConnectService } from './web3-connect.service';
+import { Web3ConnectService } from './../web3-connect.service';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { Abi, Address } from 'viem';
 import { environment } from 'environment';
 import { readContract, readContracts } from '@wagmi/core';
-import { Tournament } from '../models';
+import { Tournament } from '../../models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({

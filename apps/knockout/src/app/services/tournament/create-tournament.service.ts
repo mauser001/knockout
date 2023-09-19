@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Web3ConnectService } from './web3-connect.service';
+import { Web3ConnectService } from './../web3-connect.service';
 import { BehaviorSubject } from 'rxjs';
 import { Abi, Address, Chain, WriteContractParameters, parseEther } from 'viem';
-import { ABI_KNOCKOUT } from '../../abis'
+import { ABI_KNOCKOUT } from '../../../abis'
 import { environment } from 'environment';
 import { TournamentListService } from './tournament-list.service';
 import { TournamentConfig } from 'src/app/models';
 import { ethers } from 'ethers';
 import { waitForTransaction } from '@wagmi/core';
-import { dateToUnixString } from '../utils';
+import { dateToUnixString } from '../../utils';
 
 @Injectable({
   providedIn: 'any'

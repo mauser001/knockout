@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
-import { CreateTournamentService } from 'src/app/services/create-tournament.service';
+import { CreateTournamentService } from 'src/app/services/tournament/create-tournament.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { Web3ConnectService } from 'src/app/services/web3-connect.service';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Web3ConnectService } from './web3-connect.service';
+import { Web3ConnectService } from './../web3-connect.service';
 import { TournamentListService } from './tournament-list.service';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { Abi, Address, WriteContractParameters } from 'viem';

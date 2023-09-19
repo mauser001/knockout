@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TournamentListService } from 'src/app/services/tournament-list.service';
+import { TournamentListService } from 'src/app/services/tournament/tournament-list.service';
 import { Tournament } from 'src/app/models';
 import { TournamentInfoComponent } from '../tournament-info/tournament-info.component';
 

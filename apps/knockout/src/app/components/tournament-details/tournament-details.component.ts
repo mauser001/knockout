@@ -1,9 +1,12 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Web3ConnectService } from 'src/app/services/web3-connect.service';
-import { JoinTournamentService } from 'src/app/services/join-tournament.service';
-import { ClaimPriceService } from 'src/app/services/claim-price.service';
-import { TournamentDetailsService } from 'src/app/services/tournament-details.service';
+import { JoinTournamentService } from 'src/app/services/tournament/join-tournament.service';
+import { ClaimPriceService } from 'src/app/services/tournament/claim-price.service';
+import { TournamentDetailsService } from 'src/app/services/tournament/tournament-details.service';
+import { NextStepService } from 'src/app/services/tournament/next-step.service';
+import { ClaimWonService } from 'src/app/services/tournament/claim-won.service';
+import { SetWinnerService } from 'src/app/services/tournament/set-winner.service';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop'
 import { MatButtonModule } from '@angular/material/button';
@@ -16,13 +19,10 @@ import { TournamentStatePipe } from 'src/app/pipes/tournament-state.pipe';
 import { FormatEtherPipe } from 'src/app/pipes/format-ether.pipe';
 import { RegisterUntilPipe } from 'src/app/pipes/register-until.pipe';
 import { TournamentWrapper } from 'src/app/utils/tournament-wrapper';
-import { NextStepService } from 'src/app/services/next-step.service';
-import { ClaimWonService } from 'src/app/services/claim-won.service';
 import { AddressComponent } from '../common/address/address.component';
 import { LoadingSpinnerComponent } from '../common/loading-spinner/loading-spinner.component';
 import { PlayerCellComponent } from './player-cell/player-cell.component';
 import { SetWinnerData, TournamentState } from 'src/app/models';
-import { SetWinnerService } from 'src/app/services/set-winner.service';
 
 @Component({
   selector: 'app-tournament-details',

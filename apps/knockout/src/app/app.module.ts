@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/common/header/header.component';
 import { Web3ConnectService } from './services/web3-connect.service';
-import { TournamentListService } from './services/tournament-list.service';
+import { TournamentListService } from './services/tournament/tournament-list.service';
 import { NgOptimizedImage } from '@angular/common'
 import { ConnectButtonComponent } from './components/common/connect-button/connect-button.component';
 import { MatCardModule } from '@angular/material/card';
