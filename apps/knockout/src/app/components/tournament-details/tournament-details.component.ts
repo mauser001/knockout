@@ -10,7 +10,6 @@ import { SetWinnerService } from 'src/app/services/tournament/set-winner.service
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop'
 import { MatButtonModule } from '@angular/material/button';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -23,15 +22,16 @@ import { AddressComponent } from '../common/address/address.component';
 import { LoadingSpinnerComponent } from '../common/loading-spinner/loading-spinner.component';
 import { PlayerCellComponent } from './player-cell/player-cell.component';
 import { SetWinnerData, TournamentState } from 'src/app/models';
+import { BettingDetailsComponent } from './betting-details/betting-details.component';
 
 @Component({
   selector: 'app-tournament-details',
   standalone: true,
   imports: [
     AddressComponent,
+    BettingDetailsComponent,
     CommonModule,
     FormatEtherPipe,
-    MatBadgeModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
@@ -122,7 +122,7 @@ export class TournamentDetailsComponent {
   }
 
   claimPrice = () => {
-    this.claimPriceService.claim(this.tournamentId, true);
+    this.claimPriceService.claim(this.tournamentId);
   }
 
   claimWon = async () => {

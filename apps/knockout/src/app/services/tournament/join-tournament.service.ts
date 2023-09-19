@@ -16,7 +16,7 @@ export class JoinTournamentService {
     this.isLoading$.next(true);
     this.hasError$.next(false);
     try {
-      await this.web3ConnectService.writeContract("participate", [tournamentId]);
+      await this.web3ConnectService.writeContract("participate", [tournamentId], true, cost);
       this.tournamentListService.reload();
     } catch (err) {
       this.hasError$.next(true);

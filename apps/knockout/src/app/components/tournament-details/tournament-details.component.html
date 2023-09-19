@@ -1,7 +1,7 @@
-<app-loading-spinner *ngIf="isLoading$ | async" />
+<app-loading-spinner *ngIf="(isLoading$ | async) && !(tournament$ | async)" />
 <div *ngIf="tournament$ | async as tournament">
     <mat-card>
-        <mat-card-title class="title">
+        <mat-card-title>
             <h2>Tournament #{{tournamentId}} - {{ tournament.config.name }}</h2>
         </mat-card-title>
         <mat-card-content>
@@ -36,7 +36,7 @@
                 <div class="label">Winner</div>
                 <div class="flex-align-center winner">
                     <mat-icon>emoji_events</mat-icon>
-                    <app-address [address]="tournament.config.owner"></app-address>
+                    <app-address [address]="tWrapper().winner"></app-address>
                 </div>
             </div>
             <div class="info"
@@ -106,4 +106,5 @@
             </div>
         </mat-card-content>
     </mat-card>
+    <app-betting-details />
 </div>

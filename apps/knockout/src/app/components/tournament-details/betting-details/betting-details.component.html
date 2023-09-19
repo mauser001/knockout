@@ -1,0 +1,70 @@
+<mat-card>
+    <mat-card-title class="title">
+        <h2>Betting</h2>
+    </mat-card-title>
+    <mat-card-content>
+        <app-loading-spinner class="spinner" *ngIf="isLoading(); else bettingTable" />
+        <ng-template #bettingTable>
+            <div *ngIf="(bettingDetails$ | async) as details">
+                <div class="info">
+                    <div class="label">Total bet amount</div>
+                    <div>
+                        {{details.totalAmount | formatEther}}
+                    </div>
+                </div>
+                <div class="info" *ngIf="details.players.length > 1">
+                    <div class="label">Tournament participants</div>
+                    <table mat-table [dataSource]="details.players" class="mat-elevation-z1">
+                        <ng-container matColumnDef="address">
+                            <th mat-header-cell *matHeaderCellDef>Player</th>
+                            <td mat-cell *matCellDef="let element">
+                                <app-address [address]="element.address" />
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="total">
+                            <th mat-header-cell *matHeaderCellDef>Total bets</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.total | formatEther}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="byUser">
+                            <th mat-header-cell *matHeaderCellDef>Your bets</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.byUser | formatEther}}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <div class="info" *ngIf="details.players.length > 1 && tWrapper().canPlaceBet">
+                    <div class="label">Place bet</div>
+
+                    <form (ngSubmit)="onBet()" [formGroup]="betForm" novalidate>
+                        <mat-form-field>
+                            <mat-label>Player</mat-label>
+                            <mat-select formControlName="player" placeholder="Player">
+                                <mat-option *ngFor="let player of details.players" [value]="player.address">
+                                    <app-address [address]="player.address" [hideCopyIcon]="true" />
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Bet in {{ nativeCurrency$ | async }}</mat-label>
+                            <input matInput type="number" formControlName="bet" step="0.00001">
+                        </mat-form-field>
+                        <button [disabled]="!betForm.valid || (isLoadingBet$ | async)" mat-raised-button
+                            color="primary">Place bet</button>
+                    </form>
+                </div>
+                <div class="buttons">
+                    <button *ngIf="canClaimPrice()" mat-mini-fab color="primary" matTooltip="Claim bet price"
+                        aria-label="Claim bet price" (click)="claimPrice()">
+                        <mat-icon>system_update_alt</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </mat-card-content>
+</mat-card>

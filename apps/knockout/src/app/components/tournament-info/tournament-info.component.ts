@@ -56,6 +56,6 @@ export class TournamentInfoComponent {
   }
 
   claimPrice = () => {
-    this.tournament && this.claimPriceService.claim(this.tournament.id, true);
+    this.tournament && this.claimPriceService.claim(this.tournament.id);
   }
 }

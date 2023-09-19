@@ -4,26 +4,23 @@ License: MIT
 
 All code is open source.
 
-WIP - This is not finished, I just started building a UI for the knockout and betting smart contract.
+This webiste and it's releated smart contracts are in beta state. Use at your own risk!
 
+For detailed explanation on how the tournaments and betting work, please visit the related readme files in the repository root directory.
+
+____________________________________________________
 
 TODO List:
-- Services
-  - Load betting inforamtions for tournament
-  - Load detailed information for a tournament
-  - Place bets
-  - Claim won bets
 - Components
-  - Detailed tournament screen
-    - Betting
-      - Display current bets
-      - Add a new bet
-      - Claim won bets
   - Improve loading states
 - Improve error handling
 
 Finished:
 - Services
+  - Load betting inforamtions for tournament
+  - Load detailed information for a tournament
+  - Place bets
+  - Claim won bets
   - Proceed to the next round (for tournament admin)
   - Wrapper for WalletConnect
   - Load tournaments from smart contract
@@ -45,6 +42,10 @@ Finished:
     - List of participants
     - Current round
     - Claim winner
+    - Betting
+      - Display current bets
+      - Add a new bet
+      - Claim won bets
   - Disclaimer
 - Pipes
   - format ether

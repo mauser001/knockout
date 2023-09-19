@@ -19,5 +19,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class AddressComponent {
   @Input({ required: true }) address?: string;
+  @Input() hideCopyIcon = false;
 
 }

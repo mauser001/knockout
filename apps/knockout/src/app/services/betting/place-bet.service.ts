@@ -1,0 +1,26 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Web3ConnectService } from './../web3-connect.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PlaceBetService {
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  error$: BehaviorSubject<string> = new BehaviorSubject("");
+
+  constructor(private web3ConnectService: Web3ConnectService) { }
+
+  placeBet = async (player: string, amount: bigint, tournamentId: number) => {
+    this.isLoading$.next(true);
+    this.error$.next("");
+    try {
+      await this.web3ConnectService.writeContract("placeABet", [tournamentId, player], false, amount);
+    } catch (err: any) {
+      this.error$.next(err.message ?? "could not place bet");
+      console.log("error placing bet: ", err);
+    }
+
+    this.isLoading$.next(false);
+  }
+}

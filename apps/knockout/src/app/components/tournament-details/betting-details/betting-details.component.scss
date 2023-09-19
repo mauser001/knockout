@@ -1,0 +1,22 @@
+:host {
+    margin: 10px;
+}
+
+.title {
+    padding: 10px 10px 0 10px;
+}
+
+.spinner {
+    color: black;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}

@@ -48,11 +48,9 @@ export class Web3ConnectService {
     if (newNativeCurrency && this.nativeCurrency$.getValue() != newNativeCurrency) {
       this.nativeCurrency$.next(newNativeCurrency);
     }
-    console.log(data)
   }
 
   openModal() {
-    console.log("service openModal")
     this.web3Modal?.openModal()
   }
 
@@ -70,7 +68,6 @@ export class Web3ConnectService {
         return (chainId).toString() === environment.chainId
       })
       conector = conector || list?.[0]
-      console.log('conector', conector)
       client = await conector?.getWalletClient()
     } catch (err) {
       console.log("could not get client: ", err)
@@ -78,7 +75,7 @@ export class Web3ConnectService {
     return client
   }
 
-  writeContract = async (functionName: string, args?: Array<unknown>, isTournamentContract = true) => {
+  writeContract = async (functionName: string, args?: Array<unknown>, isTournamentContract = true, amount: bigint | undefined = undefined) => {
     try {
       let client = await this.getClient();
       if (!client) {
@@ -92,9 +89,10 @@ export class Web3ConnectService {
 
       let params: WriteContractParameters = {
         chain,
-        abi: (isTournamentContract ? ABI_KNOCKOUT.abi : ABI_BET) as Abi,
+        abi: (isTournamentContract ? ABI_KNOCKOUT.abi : ABI_BET.abi) as Abi,
         address: (isTournamentContract ? environment.knockOutContract : environment.betContract) as Address,
         functionName,
+        value: amount,
         account: this.address$.getValue() as Address,
         args
       }

@@ -49,6 +49,10 @@ body {
     --mdc-elevated-card-container-color: var(--white-background);
 }
 
+.mat-mdc-card-title {
+    padding: 10px 10px 0 10px;
+}
+
 html {
     --mat-table-background-color: var(--light-white-background);
 }

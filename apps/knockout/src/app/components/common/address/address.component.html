@@ -1,4 +1,4 @@
 <span class="address" [cdkCopyToClipboard]="address ?? ''" [matTooltip]="address ?? ''">{{address?.substring(0,
     5)}}...{{address?.substring(0, 5)}}
-    <mat-icon class="icon" inline="true">content_copy</mat-icon>
+    <mat-icon *ngIf="!hideCopyIcon" class="icon" inline="true">content_copy</mat-icon>
 </span>

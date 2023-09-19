@@ -11,7 +11,7 @@ const TournamentWrapper = (tournament?: Tournament, address?: string) => {
     }
 
     const canClaim = () => {
-        return !!address && tournament?.state === TournamentState.CANCELED || (tournament?.state === TournamentState.FINISHED && tournament?.winner === address);
+        return !!address && !tournament?.hasWithdrawn && tournament?.participating && (tournament?.state === TournamentState.CANCELED || (tournament?.state === TournamentState.FINISHED && tournament?.winner === address));
     }
 
     const canWin = () => {
@@ -26,6 +26,10 @@ const TournamentWrapper = (tournament?: Tournament, address?: string) => {
         return !!address && tournament?.state === TournamentState.STARTED && isOwner();
     }
 
+    const canPlaceBet = () => {
+        return !!address && !isOwner() && tournament && tournament.state === TournamentState.CREATED && !isInTheFutureUnix(tournament.config.registerEndDate);
+    }
+
     const winner = (): string | undefined => {
         return tournament?.state === TournamentState.FINISHED ? tournament?.winner : undefined;
     }
@@ -38,6 +42,7 @@ const TournamentWrapper = (tournament?: Tournament, address?: string) => {
         get canWin() { return canWin() },
         get canChange() { return canChange() },
         get canStart() { return canStart() },
+        get canPlaceBet() { return canPlaceBet() },
     }
 }
 

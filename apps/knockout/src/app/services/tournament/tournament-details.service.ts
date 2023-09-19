@@ -3,7 +3,7 @@ import { BehaviorSubject, filter } from 'rxjs';
 import { Web3ConnectService } from './../web3-connect.service';
 import { Tournament } from '../../models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Address, readContract, readContracts } from '@wagmi/core';
+import { Address, readContracts } from '@wagmi/core';
 import { Abi } from 'viem';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { environment } from 'environment';
@@ -46,12 +46,6 @@ export class TournamentDetailsService {
         this.hasError$.next(true);
         return;
       }
-      const countResult: any = await readContract({
-        address: environment.knockOutContract as Address,
-        abi: ABI_KNOCKOUT.abi as Abi,
-        functionName: 'lastTournamentIndex'
-      })
-      const count = parseInt(countResult);
       let contracts = [{
         address: environment.knockOutContract as Address,
         abi: ABI_KNOCKOUT.abi as Abi,
@@ -60,10 +54,11 @@ export class TournamentDetailsService {
       }, {
         address: environment.knockOutContract as Address,
         abi: ABI_KNOCKOUT.abi as Abi,
-        functionName: 'participating',
+        functionName: 'hasWithdrawn',
         args: [this.tournamentId, this.web3ConnectService.address$.getValue()]
-      }]
-      const result = await readContracts({ contracts: contracts });
+      }];
+
+      const result = await readContracts({ contracts });
       if (!result[0].result) {
         this.hasError$.next(true);
         this.isLoading$.next(false);
@@ -72,7 +67,24 @@ export class TournamentDetailsService {
       }
       const tournament = result[0].result as Tournament;
       tournament.id = this.tournamentId;
-      tournament.participating = result[1]?.result === true;
+      tournament.hasWithdrawn = !!result[1]?.result;
+      contracts = [];
+      for (let i = 0; i < tournament.playerCount; i++) {
+        contracts.push({
+          address: environment.knockOutContract as Address,
+          abi: ABI_KNOCKOUT.abi as Abi,
+          functionName: 'steps',
+          args: [this.tournamentId, "0", i]
+        })
+      }
+      const playerList = await readContracts({ contracts: contracts });
+      tournament.participants = [];
+      playerList.forEach((res) => {
+        if (res.result) {
+          tournament.participants.push(res.result as string)
+        }
+      })
+      tournament.participating = tournament.participants.includes(this.web3ConnectService.address$.getValue());
       if (tournament.remainingParticipants.length > 1 && tournament.currentStep > 0) {
         contracts = [];
         for (let i = 0; i < tournament.remainingParticipants.length; i++) {
