@@ -11,6 +11,8 @@ import { NgOptimizedImage } from '@angular/common'
 import { ConnectButtonComponent } from './components/common/connect-button/connect-button.component';
 import { MatCardModule } from '@angular/material/card';
 import { DisclaimerComponent } from './components/common/disclaimer/disclaimer.component';
+import { DebuggingService } from './services/debugging.service';
+import { LogOverlayComponent } from './components/common/log-overlay/log-overlay.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +27,13 @@ import { DisclaimerComponent } from './components/common/disclaimer/disclaimer.c
     HeaderComponent,
     MatCardModule,
     NgOptimizedImage,
+    LogOverlayComponent,
   ],
-  providers: [Web3ConnectService, TournamentListService],
+  providers: [
+    DebuggingService,
+    TournamentListService,
+    Web3ConnectService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

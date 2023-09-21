@@ -1,6 +1,7 @@
 //copy this file to environment.ts with valid properties
 
 export const environment = {
+    debugEnabled: true,
     walletConnectId: 'abc...def',
     chainId: "80001",
     knockOutContract: "0x0632C3A61dB006E05888A5F3e7094c5B7Ccf3443",

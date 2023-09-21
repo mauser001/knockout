@@ -24,7 +24,7 @@ export type Tournament = {
     state: TournamentState;
     winner: string;
     remainingParticipants: Array<string>;
-    participants: Array<string>;
+    participants?: Array<string>;
     participating: boolean;
     hasWithdrawn: boolean;
 }

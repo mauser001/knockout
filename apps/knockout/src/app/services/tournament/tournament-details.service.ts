@@ -7,9 +7,10 @@ import { Address, readContracts } from '@wagmi/core';
 import { Abi } from 'viem';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { environment } from 'environment';
+import { DebuggingService } from '../debugging.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'any'
 })
 export class TournamentDetailsService {
   isLoading$ = new BehaviorSubject(false);
@@ -20,7 +21,7 @@ export class TournamentDetailsService {
 
 
 
-  constructor(private web3ConnectService: Web3ConnectService) {
+  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService) {
     this.web3ConnectService.isConnected$.pipe(
       takeUntilDestroyed(),
       filter((value) => value)
@@ -42,7 +43,7 @@ export class TournamentDetailsService {
     try {
       let client = await this.web3ConnectService.getClient();
       if (!client) {
-        console.log("no client for network");
+        this.deb.logWarning("no client for network");
         this.hasError$.next(true);
         return;
       }
@@ -62,7 +63,7 @@ export class TournamentDetailsService {
       if (!result[0].result) {
         this.hasError$.next(true);
         this.isLoading$.next(false);
-        console.log("no tournament loaded");
+        this.deb.logError("no tournament loaded", this.tournamentId);
         return
       }
       const tournament = result[0].result as Tournament;
@@ -81,7 +82,7 @@ export class TournamentDetailsService {
       tournament.participants = [];
       playerList.forEach((res) => {
         if (res.result) {
-          tournament.participants.push(res.result as string)
+          tournament.participants!.push(res.result as string)
         }
       })
       tournament.participating = tournament.participants.includes(this.web3ConnectService.address$.getValue());
@@ -102,10 +103,11 @@ export class TournamentDetailsService {
         }
         this.hasClaimWon$.next(claimWon);
       }
+      this.deb.logInfo("tournament details loaded", tournament);
       this.tournament$.next(tournament);
     } catch (err) {
       this.hasError$.next(true);
-      console.log("error loading tournament: ", err);
+      this.deb.logError("error loading tournament: ", err, this.tournamentId);
     }
 
     this.isLoading$.next(false);

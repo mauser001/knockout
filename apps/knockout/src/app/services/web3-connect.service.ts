@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/html'
-import { Chain, GetAccountResult, PublicClient, WalletClient, configureChains, createConfig, waitForTransaction } from '@wagmi/core'
+import { Chain, GetAccountResult, InjectedConnector, PublicClient, WalletClient, configureChains, createConfig, waitForTransaction } from '@wagmi/core'
 import { arbitrumNova, polygonMumbai } from '@wagmi/core/chains'
+import { MetaMaskConnector } from '@wagmi/connectors/metaMask'
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'environment';
 import { Abi, Address, WriteContractParameters } from 'viem';
 import { ABI_BET, ABI_KNOCKOUT } from 'src/abis';
+import { DebuggingService } from './debugging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +21,8 @@ export class Web3ConnectService {
   address$: BehaviorSubject<string> = new BehaviorSubject("")
   nativeCurrency$: BehaviorSubject<string> = new BehaviorSubject("Ether")
 
-  constructor() {
-    this.init()
+  constructor(private deb: DebuggingService) {
+    this.init();
   }
 
   async init() {
@@ -30,7 +32,15 @@ export class Web3ConnectService {
     const { publicClient } = configureChains([...chains], [w3mProvider({ projectId })])
     const wagmiConfig = createConfig({
       autoConnect: true,
-      connectors: w3mConnectors({ projectId, chains }),
+      connectors: [...w3mConnectors({ projectId, chains }),
+      new MetaMaskConnector({ chains }),
+      new InjectedConnector({
+        chains,
+        options: {
+          name: 'Injected',
+          shimDisconnect: true,
+        },
+      }),],
       publicClient
     })
     this.ethereumClient = new EthereumClient(wagmiConfig, chains)
@@ -40,7 +50,12 @@ export class Web3ConnectService {
     this.accountChanged(this.ethereumClient.getAccount())
   }
 
-  private accountChanged = (data: GetAccountResult<PublicClient>) => {
+  private accountChanged = async (data: GetAccountResult<PublicClient>) => {
+    const chainId = (await data.connector?.getChainId());
+    this.deb.logInfo("Web3 account changed", { address: data.address, isConnected: data.isConnected, isConnecting: data.isConnecting, chainId });
+    if (!chainId) {
+      return;
+    }
     this.address$.next(data.address || "")
     this.isConnected$.next(data.isConnected)
     this.isConnecting$.next(data.isConnecting)
@@ -61,16 +76,16 @@ export class Web3ConnectService {
   getClient = async (): Promise<WalletClient | undefined> => {
     let client: WalletClient | undefined
     try {
-      let list = await this.ethereumClient?.getConnectors();
-      let conector = list?.find(async (con) => {
+      const conector = this.ethereumClient?.getAccount()?.connector || this.ethereumClient?.getConnectors()?.find(async (con) => {
         const chainId = await con.getChainId()
-        console.log("chainId: ", chainId)
         return (chainId).toString() === environment.chainId
       })
-      conector = conector || list?.[0]
       client = await conector?.getWalletClient()
+      if (!client) {
+        this.deb.logWarning("No client found for conector", conector);
+      }
     } catch (err) {
-      console.log("could not get client: ", err)
+      this.deb.logError("Error getting client", err);
     }
     return client
   }

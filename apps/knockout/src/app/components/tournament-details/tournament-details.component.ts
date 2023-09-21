@@ -117,12 +117,14 @@ export class TournamentDetailsComponent {
     return { valid, force };
   });
 
-  participate = () => {
-    this.tournament() && this.joinTournamentService.participate(this.tournamentId, this.tournament()!.config.ticketCost);
+  participate = async () => {
+    this.tournament() && await this.joinTournamentService.participate(this.tournamentId, this.tournament()!.config.ticketCost);
+    this.tournamentDetailsService.reload();
   }
 
-  claimPrice = () => {
-    this.claimPriceService.claim(this.tournamentId);
+  claimPrice = async () => {
+    await this.claimPriceService.claim(this.tournamentId);
+    this.tournamentDetailsService.reload();
   }
 
   claimWon = async () => {

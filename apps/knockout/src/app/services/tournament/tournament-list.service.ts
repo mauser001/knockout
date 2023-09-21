@@ -7,6 +7,7 @@ import { environment } from 'environment';
 import { readContract, readContracts } from '@wagmi/core';
 import { Tournament } from '../../models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DebuggingService } from '../debugging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class TournamentListService {
   tournaments$ = new BehaviorSubject<Array<Tournament>>([]);
 
 
-  constructor(private web3ConnectService: Web3ConnectService) {
+  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService) {
     this.web3ConnectService.isConnected$.pipe(
       takeUntilDestroyed(),
       filter((value) => value)
@@ -33,7 +34,7 @@ export class TournamentListService {
     try {
       let client = await this.web3ConnectService.getClient();
       if (!client) {
-        console.log("no client for network");
+        this.deb.logWarning("no client for network");
         this.hasError$.next(true);
         return;
       }
@@ -76,11 +77,11 @@ export class TournamentListService {
         }
       }
       this.tournaments$.next(tournaments);
-      console.log("tournaments", tournaments);
+      this.deb.logInfo("tournaments length:", tournaments.length);
 
     } catch (err) {
       this.hasError$.next(true);
-      console.log("error creating tournament: ", err);
+      this.deb.logError("error creating tournaments: ", err);
     }
 
     this.isLoading$.next(false);

@@ -24,9 +24,10 @@
                 <div class="label">Fee</div>
                 <div>{{ tournament.config.fee | formatEther }}</div>
             </div>
-            <div class="info" *ngIf="tournament.participating">
-                <div class="label">Participating</div>
-                <div>You are participating in this tournament</div>
+            <div class="info">
+                <div class="label">Participants</div>
+                <div>Minimum: {{ tournament.config.minParticipants }}</div>
+                <div *ngIf="tournament.participating">You are participating in this tournament</div>
             </div>
             <div class="info">
                 <div class="label">Registration until</div>

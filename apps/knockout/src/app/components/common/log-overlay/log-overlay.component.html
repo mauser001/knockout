@@ -1,0 +1,17 @@
+<div class="log-overlay" *ngIf="logs()?.length && !isHidden">
+    <div>
+        <mat-button-toggle-group [(ngModel)]="activeLogTypes" (ngModelChange)="updateActive()" aria-label="log types"
+            multiple>
+            <mat-button-toggle *ngFor="let v of availLogTypes" [value]="v">{{v.label}}</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div class="loglist">
+        <div class="log" [class.error]="log.type === LogTypes.Error" [class.warning]="log.type === LogTypes.Warning"
+            *ngFor="let log of filtered()">
+            {{log | formatLog}}
+        </div>
+    </div>
+</div>
+<div class="toggle" *ngIf="logs()?.length" [class.hidden]="isHidden" (click)=" isHidden=!isHidden">
+    X
+</div>
