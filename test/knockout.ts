@@ -187,7 +187,11 @@ describe("Knockout", function () {
 
       await expect(knockout.connect(user3).claimPrice(id)).to.be.revertedWith("Nothing to withdraw");
 
+      let info = await knockout.connect(user2).getTournament(id);
+      expect(info.hasWithdrawn).to.equal(false);
       await knockout.connect(user2).claimPrice(id);
+      info = await knockout.connect(user2).getTournament(id);
+      expect(info.hasWithdrawn).to.equal(true);
 
       await expect(knockout.connect(user2).claimPrice(id)).to.be.revertedWith("Already withdrawn");
     });
@@ -249,6 +253,17 @@ describe("Knockout", function () {
 
       await knockout.connect(user2).claimPrice(id);
       await knockout.connect(user3).claimPrice(id);
+    });
+
+    it.only("Register user namese", async function () {
+      const { knockout, user1, user2 } = await loadFixture(deployOneYearLockFixture);
+
+      await knockout.connect(user1).registerPlayerName('First');
+      await knockout.connect(user2).registerPlayerName('Second');
+      const list = await knockout.connect(user2).getPlayerNames([user1.address, user2.address]);
+
+      expect(list[0]).to.be.eq("First");
+      expect(list[1]).to.be.eq("Second");
     });
   });
 });

@@ -11,6 +11,7 @@ contract Knockout is IKnockout {
     mapping(uint => mapping(uint => mapping(address => bool))) public claimWon; // tournament index => current step => address => claim won
     mapping(uint => mapping(address => bool)) public participating; // tournament index => address => is participating
     mapping(uint => mapping(address => bool)) public hasWithdrawn; // tournament index => address => has withdrawn price or ticket cost
+    mapping(address => string) public playerDictionary;
 
     event TournamentCreated(
         string name,
@@ -264,11 +265,16 @@ contract Knockout is IKnockout {
         if (toWithdraw > totalAmount[tournamentId]) {
             toWithdraw = totalAmount[tournamentId];
         }
+        hasWithdrawn[tournamentId][msg.sender] = true;
+        totalAmount[tournamentId] -= toWithdraw;
         require(toWithdraw > 0, "Nothing to withdraw");
         (bool sent, ) = msg.sender.call{value: toWithdraw}("");
         require(sent, "Failed to withdraw");
-        hasWithdrawn[tournamentId][msg.sender] = true;
-        totalAmount[tournamentId] -= toWithdraw;
+    }
+
+    // Register user name
+    function registerPlayerName(string calldata name) external {
+        playerDictionary[msg.sender] = name;
     }
 
     // get informations for a tournament
@@ -283,6 +289,7 @@ contract Knockout is IKnockout {
         info.totalAmount = totalAmount[tournamentId];
         info.config = tournaments[tournamentId];
         info.state = state;
+        info.hasWithdrawn = hasWithdrawn[tournamentId][msg.sender];
         info.winner = state == TournamentState.FINISHED
             ? steps[tournamentId][current][0]
             : address(0);
@@ -331,5 +338,14 @@ contract Knockout is IKnockout {
             state = TournamentState.STARTED;
         }
         return state;
+    }
+
+    function getPlayerNames(
+        address[] memory addreses
+    ) public view returns (string[] memory names) {
+        names = new string[](addreses.length);
+        for (uint256 i = 0; i < addreses.length; i++) {
+            names[i] = playerDictionary[addreses[i]];
+        }
     }
 }

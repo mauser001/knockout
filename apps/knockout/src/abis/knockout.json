@@ -1,5 +1,5 @@
 {
-    "abi": [
+    "abi":[
         {
             "anonymous": false,
             "inputs": [
@@ -318,6 +318,11 @@
                             "type": "address"
                         },
                         {
+                            "internalType": "bool",
+                            "name": "hasWithdrawn",
+                            "type": "bool"
+                        },
+                        {
                             "internalType": "address[]",
                             "name": "remainingParticipants",
                             "type": "address[]"
@@ -326,6 +331,25 @@
                     "internalType": "struct TournamentInfo[]",
                     "name": "",
                     "type": "tuple[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "addreses",
+                    "type": "address[]"
+                }
+            ],
+            "name": "getPlayerNames",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "names",
+                    "type": "string[]"
                 }
             ],
             "stateMutability": "view",
@@ -430,6 +454,11 @@
                             "type": "address"
                         },
                         {
+                            "internalType": "bool",
+                            "name": "hasWithdrawn",
+                            "type": "bool"
+                        },
+                        {
                             "internalType": "address[]",
                             "name": "remainingParticipants",
                             "type": "address[]"
@@ -528,6 +557,38 @@
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "playerDictionary",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                }
+            ],
+            "name": "registerPlayerName",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {

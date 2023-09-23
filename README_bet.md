@@ -20,4 +20,4 @@ Users can withdraw their bet if:
 -  We don't have a winner after one year
 -  Nobody bet on the correct winner
 
-You can find a test version of this contract on Polygon-Mumbai: https://mumbai.polygonscan.com/address/0x15b89915B6E6b31D8D09993c0D8F955FaEe06798
+You can find a test version of this contract on Polygon-Mumbai: https://mumbai.polygonscan.com/address/0xDC0485A82cA4aaFED1761e46961eBab5E6568200

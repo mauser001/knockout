@@ -24,6 +24,7 @@ struct TournamentInfo {
     uint currentStep;
     TournamentState state;
     address winner;
+    bool hasWithdrawn;
     address[] remainingParticipants;
 }
 

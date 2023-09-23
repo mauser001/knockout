@@ -3,7 +3,7 @@ import { BehaviorSubject, filter } from 'rxjs';
 import { Web3ConnectService } from './../web3-connect.service';
 import { Tournament } from '../../models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Address, readContracts } from '@wagmi/core';
+import { Address, readContract, readContracts } from '@wagmi/core';
 import { Abi } from 'viem';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { environment } from 'environment';
@@ -47,29 +47,22 @@ export class TournamentDetailsService {
         this.hasError$.next(true);
         return;
       }
-      let contracts = [{
+
+      const result = await readContract({
         address: environment.knockOutContract as Address,
         abi: ABI_KNOCKOUT.abi as Abi,
         functionName: 'getTournament',
         args: [this.tournamentId]
-      }, {
-        address: environment.knockOutContract as Address,
-        abi: ABI_KNOCKOUT.abi as Abi,
-        functionName: 'hasWithdrawn',
-        args: [this.tournamentId, this.web3ConnectService.address$.getValue()]
-      }];
-
-      const result = await readContracts({ contracts });
-      if (!result[0].result) {
+      });
+      if (!result) {
         this.hasError$.next(true);
         this.isLoading$.next(false);
         this.deb.logError("no tournament loaded", this.tournamentId);
         return
       }
-      const tournament = result[0].result as Tournament;
+      const tournament = result as Tournament;
       tournament.id = this.tournamentId;
-      tournament.hasWithdrawn = !!result[1]?.result;
-      contracts = [];
+      let contracts = [];
       for (let i = 0; i < tournament.playerCount; i++) {
         contracts.push({
           address: environment.knockOutContract as Address,

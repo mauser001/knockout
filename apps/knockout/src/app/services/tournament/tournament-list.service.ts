@@ -58,21 +58,14 @@ export class TournamentListService {
           functionName: 'participating',
           args: [i, this.web3ConnectService.address$.getValue()]
         })
-        contracts.push({
-          address: environment.knockOutContract as Address,
-          abi: ABI_KNOCKOUT.abi as Abi,
-          functionName: 'hasWithdrawn',
-          args: [i, this.web3ConnectService.address$.getValue()]
-        })
       }
       const result = await readContracts({ contracts: contracts });
       const tournaments: Array<Tournament> = []
-      for (let i = 0; i < result.length; i = i + 3) {
+      for (let i = 0; i < result.length; i = i + 2) {
         const tournament = result[i].result as Tournament | undefined;
         if (tournament) {
-          tournament.id = i / 3 + 1;
+          tournament.id = i / 2 + 1;
           tournament.participating = result[i + 1]?.result === true;
-          tournament.hasWithdrawn = result[i + 2]?.result === true;
           tournaments.unshift(tournament);
         }
       }
