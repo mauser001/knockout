@@ -85,7 +85,8 @@ export class BettingDetailsComponent {
       return false
     }
 
-    const can = !!b.players.find((p) => p.byUser > 0 && (t.state === TournamentState.CANCELED || t.remainingParticipants[0] === p.address));
+    const can = !!b.players.find((p) => p.byUser > 0 && (t.state === TournamentState.CANCELED || t.remainingParticipants[0] === p.address))
+      || (!!b.players.find((p) => p.total.toString() === "0" && t.remainingParticipants[0] === p.address) && !!b.players.find((p) => p.byUser > 0));
 
     return can && !b.hasWithdrawn;
   });
