@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { DisclaimerComponent } from './components/common/disclaimer/disclaimer.component';
 import { DebuggingService } from './services/debugging.service';
 import { LogOverlayComponent } from './components/common/log-overlay/log-overlay.component';
+import { UserMappingService } from './services/user/user-mapping.service';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { LogOverlayComponent } from './components/common/log-overlay/log-overlay
   providers: [
     DebuggingService,
     TournamentListService,
+    UserMappingService,
     Web3ConnectService,
   ],
   bootstrap: [AppComponent]

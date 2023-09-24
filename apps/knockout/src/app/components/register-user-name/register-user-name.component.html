@@ -1,0 +1,20 @@
+<mat-card>
+    <mat-card-header>
+        <h2>Register new user</h2>
+        <label>This is an optional feature to connect your ingame user name with your wallet, so that it's easier to
+            find you game.</label>
+    </mat-card-header>
+    <mat-card-content>
+        <form (ngSubmit)="onSubmit()" [formGroup]="userNameForm" novalidate>
+            <mat-form-field>
+                <mat-label>Player name</mat-label>
+                <input matInput placeholder="Player name" formControlName="name">
+            </mat-form-field>
+            <button [disabled]="!(isConnected$ | async) || (isLoading$ | async)" mat-raised-button
+                color="primary">Submit</button>
+        </form>
+        <mat-error *ngIf="hasError$ | async">
+            There was an error creating the tournament.
+        </mat-error>
+    </mat-card-content>
+</mat-card>

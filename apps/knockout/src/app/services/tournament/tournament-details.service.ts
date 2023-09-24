@@ -8,6 +8,7 @@ import { Abi } from 'viem';
 import { ABI_KNOCKOUT } from 'src/abis';
 import { environment } from 'environment';
 import { DebuggingService } from '../debugging.service';
+import { UserMappingService } from '../user/user-mapping.service';
 
 @Injectable({
   providedIn: 'any'
@@ -21,7 +22,7 @@ export class TournamentDetailsService {
 
 
 
-  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService) {
+  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService, private userMappingService: UserMappingService) {
     this.web3ConnectService.isConnected$.pipe(
       takeUntilDestroyed(),
       filter((value) => value)
@@ -72,12 +73,14 @@ export class TournamentDetailsService {
         })
       }
       const playerList = await readContracts({ contracts: contracts });
+
       tournament.participants = [];
       playerList.forEach((res) => {
         if (res.result) {
           tournament.participants!.push(res.result as string)
         }
-      })
+      });
+      this.userMappingService.loadPlayerNames(tournament.participants!);
       tournament.participating = tournament.participants.includes(this.web3ConnectService.address$.getValue());
       if (tournament.remainingParticipants.length > 1 && tournament.currentStep > 0) {
         contracts = [];

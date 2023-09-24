@@ -8,6 +8,8 @@ import { readContract, readContracts } from '@wagmi/core';
 import { Tournament } from '../../models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebuggingService } from '../debugging.service';
+import { addItemToList, mergeLists } from 'src/app/utils';
+import { UserMappingService } from '../user/user-mapping.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class TournamentListService {
   tournaments$ = new BehaviorSubject<Array<Tournament>>([]);
 
 
-  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService) {
+  constructor(private web3ConnectService: Web3ConnectService, private deb: DebuggingService, private userMappingService: UserMappingService) {
     this.web3ConnectService.isConnected$.pipe(
       takeUntilDestroyed(),
       filter((value) => value)
@@ -60,15 +62,21 @@ export class TournamentListService {
         })
       }
       const result = await readContracts({ contracts: contracts });
-      const tournaments: Array<Tournament> = []
+      const tournaments: Array<Tournament> = [];
+      let addresses: string[] = [];
       for (let i = 0; i < result.length; i = i + 2) {
         const tournament = result[i].result as Tournament | undefined;
         if (tournament) {
+          addItemToList(tournament.config.owner, addresses);
+          if (tournament.remainingParticipants.length) {
+            addresses = mergeLists(addresses, tournament.remainingParticipants);
+          }
           tournament.id = i / 2 + 1;
           tournament.participating = result[i + 1]?.result === true;
           tournaments.unshift(tournament);
         }
       }
+      this.userMappingService.loadPlayerNames(addresses);
       this.tournaments$.next(tournaments);
       this.deb.logInfo("tournaments length:", tournaments.length);
 
