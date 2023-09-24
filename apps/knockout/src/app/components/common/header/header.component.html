@@ -1,13 +1,13 @@
 <header>
     <h1 routerLink="/" aria-label="home">
         <img ngSrc="./assets/arena.png" width="32" height="32">
-        Comunity tournaments
+        Comunity tournaments<span *ngIf="userName()">, welcome <i>{{userName()}}</i></span>
     </h1>
     <div class="buttons">
         <a routerLink="/register" matTooltip="Register your username (optinal)" class="button"
             aria-label="navigate to register user page">
             <button mat-raised-button color="primary">
-                Register user
+                {{userName() ? 'Change user name' : 'Register user'}}
             </button>
         </a>
         <a routerLink="/new" matTooltip="Create a new tournament" class="button"

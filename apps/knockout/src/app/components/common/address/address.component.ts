@@ -22,14 +22,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class AddressComponent {
   @Input({ required: true }) address?: string;
   @Input() hideCopyIcon = false;
-  userNameMap$ = this.userMappingService.userNameMap$;
-  userNameMap = toSignal(this.userNameMap$);
+  userNameMap = toSignal(this.userMappingService.userNameMap$);
 
   userName = computed(() => this.address && this.userNameMap()?.[this.address]);
   shortAddress = computed(() => this.address ? `${this.address?.substring(0,
     5)}...${this.address?.substring((this.address?.length ?? 0) - 3)}` : "....");
 
-  constructor(private userMappingService: UserMappingService) {
-
-  }
+  constructor(private userMappingService: UserMappingService) { }
 }

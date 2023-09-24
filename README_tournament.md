@@ -25,6 +25,7 @@ Here is how it works:
   - When a stage is finished and the owner moves to the next stage only the winners will proceed to the next round. When there is only one Player left we have a winner. 
   - The owner should make sure that everybody has claimed their victory before moving to the next round or at least communicate clearly when he plans to do that. 
 - When two players finished their game the winner has to 'claim victory' in the smart contract. 
+- Users can register their user name to map them with their wallet. This is optional, but helps other players to find them in the game. 
 
 Claiming the price:
 Once there is only one player left in the tournament we have a winner and he can claim the price. When he does the fee will be sent to the owner. 
